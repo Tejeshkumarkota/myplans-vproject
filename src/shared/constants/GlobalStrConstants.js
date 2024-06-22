@@ -1,0 +1,1 @@
+// Global String Constants (Error occured messages, please login messages etc.)(common text)
