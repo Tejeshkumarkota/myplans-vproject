@@ -1,11 +1,12 @@
 import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { RouteConstants } from "../../shared/constants/RouteConstants";
 
 const Login = () => {
 
     const nav = useNavigate();
     const goToList = () => 
-        nav('/list');
+        nav(RouteConstants.LIST_CATEGORY);
     
   return (
     <>
@@ -44,7 +45,7 @@ const Login = () => {
                   <button onClick={goToList} type="button" className="btn btn-primary">
                     Login
                   </button>
-                  <Link to="/sign-up" className="text-primary text-decoration-none mx-2">Register now</Link>
+                  <Link to={RouteConstants.REGISTER} className="text-primary text-decoration-none mx-2">Register now</Link>
                 </form>
               </div>
             </div>

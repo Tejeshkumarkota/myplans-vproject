@@ -1,37 +1,36 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Endpoints } from "../../shared/constants/Endpoints";
+import { ToastContainer, toast } from 'react-toastify';
+import { Endpoints } from "../../../shared/constants/Endpoints";
+import { RouteConstants } from "../../../shared/constants/RouteConstants";
+import styles from './CreateCategory.module.css';
 
 export default function CreateCategory() {
   const [name, setName] = useState("");
   const nav = useNavigate();
 
   const goToList = () => {
-    nav("/list");
+    nav(RouteConstants.LIST_CATEGORY);
   };
 
   const createStudent = () => {
     if (name) {
-      fetch(Endpoints.CATEGORIES, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          // Authorization: "Bearer 17|t10FEKvdmXCQjnoVfTUkUxw88bxlNNyqdMOTwZfq43663377"
-        },
-        body: JSON.stringify({
-          productCategoryImage: "",
-          parentProductCategoryId: "",
-          productCategoryName: name,
-        }),
+      axios.post(Endpoints.CATEGORIES,{
+        productCategoryImage: "",
+        parentProductCategoryId: "",
+        productCategoryName: name,
       })
-        .then((res) => res.json())
         .then(() => {
-          alert("Added successfully");
-          nav("/list");
+          nav(RouteConstants.LIST_CATEGORY);
+          setTimeout(()=> {
+            toast.success("Added Successfully!");
+          },500)
+        }).catch((err) => {
+          toast.error("Something went wrong!");
         });
     } else {
-      alert("please fill and submit");
+      toast.error("Please fill and submit");
     }
   };
 
@@ -42,7 +41,7 @@ export default function CreateCategory() {
           <div className="col-12">
             <div className="card my-4">
               <div className="card-body">
-                <h3 className="text-left">
+                <h3 className={styles.test + ' text-start text-black'}>
                   {" "}
                   <i onClick={goToList} className="bi bi-arrow-left-square me-3 c-pointer h3"></i> 
                   Create
@@ -76,6 +75,7 @@ export default function CreateCategory() {
           </div>
         </div>
       </div>
+      <ToastContainer theme="colored" />
     </>
   );
 }

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { RouteConstants } from "../../shared/constants/RouteConstants";
+import { Endpoints } from "../../shared/constants/Endpoints";
+import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function EditCategory() {
   const [name, setName] = useState("");
@@ -7,7 +11,7 @@ export default function EditCategory() {
   const param = useParams();
 
   const goToList = () => {
-    nav("/list");
+    nav(RouteConstants.LIST_CATEGORY);
   };
 
   useEffect(() => {
@@ -15,38 +19,26 @@ export default function EditCategory() {
   }, []);
 
   const getSelectedData = () => {
-    fetch(
-      "https://trainingsapi.localinfoz.com/api/product-categories/" +
-        param.studentid
-    )
-      .then((res) => res.json())
+    axios.get(Endpoints.CATEGORIES+"/"+param.categoryId)
       .then((data) => {
-        setName(data.data.productCategoryName);
+        setName(data.data.data.productCategoryName);
       });
   };
 
   const updateStudent = () => {
     if (name) {
-      fetch(
-        "https://trainingsapi.localinfoz.com/api/product-categories/" +
-          param.studentid,
-        {
-          method: "PATCH",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            productCategoryImage: "",
-            parentProductCategoryId: "",
-            productCategoryName: name,
-          }),
-        }
-      )
-        .then((res) => res.json())
+      axios.patch(Endpoints.CATEGORIES+"/"+param.categoryId,{
+        productCategoryImage: "",
+        parentProductCategoryId: "",
+        productCategoryName: name,
+      })
         .then(() => {
-          alert("Updated successfully!");
-          nav("/list");
+          nav(RouteConstants.LIST_CATEGORY);
+          setTimeout(()=> {
+            toast.success("Updated Successfully!");
+          },500)
+        }).catch((err) => {
+          toast.error("Something went wrong!");
         });
     } else {
       alert("please fill and submit");
@@ -97,6 +89,7 @@ export default function EditCategory() {
           </div>
         </div>
       </div>
+      <ToastContainer theme="colored" />
     </>
   );
 }

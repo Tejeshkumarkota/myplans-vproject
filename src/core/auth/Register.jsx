@@ -1,9 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { RouteConstants } from "../../shared/constants/RouteConstants";
 
 export default function Register() {
   const nav = useNavigate();
-  const goToLogin = () => nav("/login");
+  const goToLogin = () => nav(RouteConstants.LOGIN);
 
   return (
     <div className="container">
@@ -64,7 +65,7 @@ export default function Register() {
                   Register
                 </button>
                 <Link
-                  to="/login"
+                  to={RouteConstants.LOGIN}
                   className="text-primary text-decoration-none mx-2"
                 >
                   Have an account? Login now
